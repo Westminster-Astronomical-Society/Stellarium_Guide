@@ -136,6 +136,28 @@ const dtg = "2026-05-01T00:00:00"; // Date and time in ISO 8601 format
 
 const epochTime = Date.now(); // Current date and time in milliseconds since the Unix epoch
 const julianDate = getJulianDate(epochTime); // Current date and time in Julian date format
+
+
+function pauseKey(label = true) {
+    var timerate = core.getTimeRate();
+    core.setTimeRate(0.05);
+    L = LabelMgr.labelScreen("Paused ('L' to continue)", 20, core.getScreenHeight() - 60,
+        visible = false, fontSize = 18, fontColor = "#666666");
+    if (label) {
+        LabelMgr.setLabelShow(L, true);
+    }
+    i = 0;
+    do {
+        core.wait(1);
+        i++;
+    }
+    while (core.getTimeRate() < 0.1);
+    core.setTimeRate(timerate);
+    LabelMgr.deleteLabel(L);
+}
+
 ```
 
 In this example, we define some color variables using the `core.vec3f` function so that they can be refered to by name rather than by their RGB values. We also define a constant variable `dtg` that contains a date and time in ISO 8601 format, and we use the `Date.now()` function to get the current date and time in milliseconds since the Unix epoch, which we then convert to Julian date format using the `getJulianDate` function. These are defined as constants because they are not meant to be changed.
+
+Finally, we define a function called `pauseKey` that pauses the script until the user presses the 'L' key. The function takes an optional argument `label` that determines whether to display a label on the screen while paused. The function saves the current time rate, sets the time rate to a slow value to effectively pause the script, and then waits in a loop until the time rate is increased again (by pressing 'L'). After resuming, it restores the original time rate and deletes the label if it was displayed.
