@@ -20,6 +20,7 @@ project:
     - file: appendix-B.md
     - file: appendix-C.md
     - file: appendix-D.md
+    - file: appendix-E.md
     - file: references.md
     
 site:
