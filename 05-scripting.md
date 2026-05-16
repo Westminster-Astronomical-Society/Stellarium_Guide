@@ -51,7 +51,7 @@ var constellations = ConstellationMgr.getConstellationsEnglishNames();
 var circumpolar = new Array("UMi", "UMa", "Dra", "Cep", "Cas", "Cam");
 
 var zodiac = new Array("Ari", "Tau", "Gem", "Can", "Leo",
-    "Virgo", "Libra", "Scorpius", "Sgt", "Cap", "Aqr", "Psc");
+    "Vir", "Lib", "Sco", "Sgr", "Cap", "Aqr", "Psc");
 
 // Messier and Caldwell lists
 var messier = new Array();
@@ -68,6 +68,8 @@ The first line of this example the script calls the `getConstellationsEnglishNam
 The next two lines define arrays for the circumpolar and zodiac constellations.
 
 The last part defines two empty arrays for the Messier and Caldwell objects and uses a loop to generate the names of the objects.
+
+The arrays are lists of objects that can be accessed by index or iterated over in a loop. For example, you could use the `zodiac` array to point to select and display each constellation in turn.
 
 ```{note}
 There are three (or four) ways to define variables in JavaScript: `var`, `let`, and `const`. Each has subtle differences mostly related to scope and mutability. People have strong opinions on this. You can read about it [here](https://www.freecodecamp.org/news/var-let-and-const-whats-the-difference/) if you are interested.
@@ -120,6 +122,10 @@ In this example, we define some color variables using the `core.vec3f` function 
 
 Finally, we define a function called `pauseKey` that pauses the script until the user presses the 'L' key. The function takes an optional argument `label` that determines whether to display a label on the screen while paused. The function saves the current time rate, sets the time rate to a slow value to effectively pause the script, and then waits in a loop until the time rate is increased again (by pressing 'L'). After resuming, it restores the original time rate and deletes the label if it was displayed.
 
+```{note}
+Blocks of code in JavaScript are denoted by curly braces `{}`. This is also a common source of errors in scripts, so be sure to include the opening and closing curly braces for all blocks of code, such as function definitions and loops.
+```
+
 ### Main script
 
 The main part of the script consists primarily of a series of calls to the Stellarium API to control various aspects of Stellarium. This is where you would put the main logic of your script, such as setting the location, time, and landscape, and then performing actions like pointing to objects, changing the field of view, and so on.
@@ -160,4 +166,114 @@ In addition, the following modules are available for use in scripts:
 - `NomenclatureMgr`
 
 Some, but not all of the plugins are also accessible from scripts.
+
+#### Setting up the Presentation
+
+At the beginning of your script you will typically want to set up the presentation by setting the location, landscape, display options, and the initial view. You can put this in the main part of the script or as a separate function that can be reused in other scripts. For example:
+
+```javascript
+// Name: settings.inc
+// License: Public Domain
+// Author: Christopher Bennett
+// Version: 1.0, 2026-05-15
+// Description: This file contains settings and utility functions for Stellarium scripts
+
+include("save_state.inc");
+
+function setup() {
+    core.debug("Setting up environment");
+
+    // reset view to home and save state.
+    core.goHome();
+    saveState("RestoreState");
+
+    // az mount, atmosphere, landscape, no lines, labels or markers
+    core.clear("natural");
+
+    // clear any existing markers, labels, and screen images
+    MarkerMgr.deleteAllMarkers();
+    LabelMgr.deleteAllLabels();
+    ScreenImageMgr.deleteAllImages();
+
+    // hide the sky layer and remove any existing sky images
+    StelSkyLayerMgr.setFlagShow(false);
+    var keys = StelSkyLayerMgr.getAllKeys();
+
+    if (keys.length > 2) {
+        for (var i = 2; i < keys.length; i++) {
+            core.removeSkyImage(keys[i]);
+        };
+    };
+
+    core.wait(2);
+    // core.setObserverLocation("Bear Branch", "Earth");
+    core.setObserverLocation(-76.986769, 39.647307, 210, 2, "BBNC", "Earth");
+    LandscapeMgr.setCurrentLandscapeName("Bear Branch");
+
+    // Set any other options you want here, for example, grid lines, fonts, colors, etc.
+
+    core.setGuiVisible(false);
+}
+```
+
+This example will give you a clean environment to work with for your presentation. There is a `save_state.inc` file that comes with Stellarium that contains a function for saving the state of Stellarium so that you can restore it at the end of your presentation. **It does not work with the latest version of Stellarium**, but there is an updated version in the Stellarium_Template repository on the WASI GitHub. To use it call `saveState("RestoreState")` at the beginning of your script and then you can call `restoreState("RestoreState")` at the end of your script to restore the state of Stellarium to what it was before you ran the script.
+
+The `core.clear("natural")` function call will set the view to an azimuthal mount, turn on the atmosphere, and landscape and lines, labels and marker off. other options for this function include:
+
+- starchart : equatorial mount, constellation lines on, no landscape, no atmosphere etc.  and labels & markers on.
+- deepspace : like starchart, but no planets, no eq.grid, no markers, no lines.
+- galactic : like deepspace, but in galactic coordinate system.
+- supergalactic : like deepspace, but in supergalactic coordinate system. 
+
+There is no deleteAll function for SkyImages so they have to be deleted individually. The loop unloads them one by one leaving the first two keys (custom textures and nebulae) loaded.
+
+You can include this file in your main script and call the `setup` function at the beginning of your script to set up the presentation environment.
+
+```javascript
+// Title: My Script
+// Author: Your Name
+// License: MIT (or whatever) 
+// Version: 1.0
+// Description: This is a description of my script.
+
+include("common_objects.inc");
+include("settings.inc");
+
+setup();
+```
+
+#### Date and Time
+
+You can set the date and time in your script using the `core.setDate` function. The date and time should be in ISO 8601 format, for example:
+
+```javascript
+core.setDate("2026-05-01T00:00:00", spec = "local");
+```
+
+Dates can be specified in UTC, local time, or sidereal time by changing the `spec` argument to "utc" or "local". UTC is the default. You can use `setDate("now")` to set the date and time to the current date and time. Relative dates and times can also be specified using the `+` and `-` operators, for example:
+
+```javascript
+core.setDate("-1hour"); // subtract one hour from the date and time
+core.setDate("now +1day sidereal"); // add one sidereal day to the current date
+```
+
+Units for relative dates are second, minute, hour, day, sol, week, month, and year. The sol unit is one day on the planet that is currently selected as the observer's location. The units are in solar time unless the "sidereal" specifier is included.
+
+Dates can also be set using the Julian day number with `core.setJDay(2461177.5)`.
+
+You can set the time rate using the `core.setTimeRate` function. The time rate is a multiplier for the passage of time in Stellarium. For example, a time rate of 1 means that time passes at the normal rate, while a time rate of 60 means that time passes 60 times faster than normal. You can use this to speed up or slow down the passage of time in your presentation. Used in combination with `core.waitFor()`, you can fast forward to a specific date and time in your presentation. For example:
+
+```javascript
+core.setDate("2026-05-01T21:00:00", spec = "local");
+
+core.setTimeRate(600); // set time rate to 600x normal speed
+core.waitFor("2026-05-02T00:00:00", spec = "local"); // wait for 3 hours to pass
+core.setTimeRate(1); // set time rate back to normal
+```
+
+Make sure the waitFor date is in the future relative to the current date and time, otherwise the script will wait forever. You can also use `core.waitFor("+3hours")` to wait for a relative amount of time to pass to avoid this problem.
+
+There are quite a few functions for getting, setting, and working with dates and times in the `core` module, so be sure to check the documentation for more information on how to use them in your scripts.
+
+#### Selecting and Viewing Objects
 
