@@ -142,6 +142,4 @@ On Linux it is in:
 
 This  is the configuration file that runs at startup. If you run it from the command line, you can specify a different configuration file with the `-c` option. For example, `stellarium -c myconfig.ini` will start Stellarium with those default settings.
 
----
-
-PS: You might be asking yourself, "Should I fiddle with the `config.ini`?" Absolutely! Fiddle with the settings. Fiddle with all the settings. Fiddle with them until you get the view you want. Then save them. If you break it, just delete the file and it will generate a new one with defaults the next time you run Stellarium. Or you could back it uo first. That's probably a good idea.
+The `config.ini` can be edited manually to change any of the default settings. If for some reason you want to reset all your settings, you can delete the `config.ini` file and Stellarium will create a new one with the original default settings.
