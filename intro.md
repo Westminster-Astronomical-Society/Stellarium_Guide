@@ -1,7 +1,7 @@
 # Stellarium User Guide
 
-```{image} ./_images/cas_color.png
-:alt: Cassiopeia
+```{image} ./_images/stellarium-001.png
+:alt: Stellarium
 :class: dark-light
 :width: 100%
 :align: center
