@@ -15,7 +15,8 @@ project:
     - file: 02-navigating.md
     - file: 03-customize.md
     - file: 04-scripting.md
-    - file: 05-planetarium.md
+    - file: 05-scripting.md
+    - file: 06-planetarium.md
     - file: appendix-A.md
     - file: appendix-B.md
     - file: appendix-C.md
