@@ -18,7 +18,7 @@ Stellarium Scripts
 
 ## The Scripts Console
 
-There is also a script console you can access by pressing `F11`. In the console you can open, edit, and run scripts in whole or in part. There is also a log and output tab that shows the output of the script and any errors that occur. This is useful for debugging your scripts and making minor adjustments to existing scripts. A proper text editor should be used for writing scripts, but the console is useful for quick edits and testing.
+There is also a script console you can access by pressing `F11`. In the console you can open, edit, and run scripts in whole or in part. There is also a log that shows any errors that occur and an output tab that shows the output of the script. This is useful for debugging your scripts and making minor adjustments to existing scripts. A proper text editor should be used for writing scripts, but the console is useful for quick edits and testing.
 
 ```{figure} _images/stel-console.png
 :name: console
@@ -30,7 +30,7 @@ Stellarium Console
 
 ## Keyboard Shortcuts
 
-You can also assign a script to a keyboard shortcut. This is useful for running scripts during a presentation. To assign a script to a keyboard shortcut, open the help dialog and click "Edit keyboard shortcuts". Click the "Add" button and select the script you want to assign. Then press the key combination you want to use as the shortcut and click "OK". You can now run the script by pressing the assigned key combination.
+You can also assign a script to a keyboard shortcut. This is useful for running scripts during a presentation. To assign a script to a keyboard shortcut, open the help dialog and click "Edit keyboard shortcuts". Select the script you want to assign, enter the keyboard shortcut you want to use, click the "Apply" button. You can now run the script by pressing the assigned key combination.
 
 ```{figure} _images/stel-keyboard.png
 :name: keyboard
