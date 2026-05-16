@@ -223,9 +223,11 @@ The `core.clear("natural")` function call will set the view to an azimuthal moun
 - starchart : equatorial mount, constellation lines on, no landscape, no atmosphere etc.  and labels & markers on.
 - deepspace : like starchart, but no planets, no eq.grid, no markers, no lines.
 - galactic : like deepspace, but in galactic coordinate system.
-- supergalactic : like deepspace, but in supergalactic coordinate system. 
+- supergalactic : like deepspace, but in supergalactic coordinate system.
 
 There is no deleteAll function for SkyImages so they have to be deleted individually. The loop unloads them one by one leaving the first two keys (custom textures and nebulae) loaded.
+
+Location can be set either by name or by coordinates. If set by name the location must be defined in the location database.
 
 You can include this file in your main script and call the `setup` function at the beginning of your script to set up the presentation environment.
 
@@ -277,3 +279,26 @@ There are quite a few functions for getting, setting, and working with dates and
 
 #### Selecting and Viewing Objects
 
+  TODO:
+
+#### Lines, Constellations, Labels, and Markers
+
+  TODO:
+
+#### Images and Videos
+
+  TODO:
+
+## A Few General Tips
+
+If you are new to JavaScript or working with Stellarium scripts, the most important thing to remember is if it works it's good enough. Don't worry about writing perfect code.
+
+But... A few things to keep in mind:
+
+- Document your code. It will make your life easier and help others understand it.
+- Don't repeat yourself. Use functions to organize your code and make it reusable.
+- RTFM. The Stellarium scripting documentation is not so good, but it's there if you need it.
+- Steal other people's stuff.
+- Ask for help. Help if asked.
+
+That is all.
