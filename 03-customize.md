@@ -18,7 +18,7 @@ The landscape files include a 360-degree panoramic image with the sky set to tra
 
 The landscape configuration file should contain at a minimum the following parameters:
 
-```ini
+```toml
 [landscape]
 name = Bear Branch
 type = spherical
