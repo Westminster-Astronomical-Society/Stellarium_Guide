@@ -17,6 +17,7 @@ project:
     - file: 04-scripting.md
     - file: 05-scripting.md
     - file: 06-planetarium.md
+    - file: 07-integrations.md
     - file: appendix-A.md
     - file: appendix-B.md
     - file: appendix-C.md

@@ -1,0 +1,1 @@
+# Using Stellarium with N.I.N.A.
