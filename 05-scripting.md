@@ -22,6 +22,128 @@ The script header is a comment block at the beginning of the script that provide
 Comments in scripts are denoted by `//` and are ignored by the JavaScript interpreter.
 ```
 
+The prototypical "hello world" script for JavaScript is:
+
+```javascript
+console.log("Hello, world!");
+```
+
+This will print "Hello, world!" to the terminal and if you start Stellarium in a terminal you will, in fact, see this message printed there.
+But you probably want to see messages in Stellarium, so instead you can use the `core.debug()` function from the Stellarium APIto print messages to the script console log. For example:
+
+```javascript
+core.debug("Hello, Universe!");
+```
+
+```{figure} _images/stel-debug.png
+:name: console_log
+:class: dark-light
+:width: 100%
+:align: center
+Stellarium Console Log
+```
+
+As the name implies, the `core.debug()` function is meant for debugging purposes and can be useful for tracking down errors in your script.
+
+```{note}
+All statements in JavaScript files must end with a semicolon. This is a common source of errors in scripts, so be sure to include semicolons at the end of each statement.
+```
+
+### Common JavaScript Data Structures
+
+You can define variables and constants in your script to store values that you want to use later. For example:
+
+```javascript
+const BrightRed = core.vec3f(0.8314, 0.1647, 0.1647);  // #D42A2A
+
+var date = "2026-05-01T00:00:00"; // Date and time in ISO 8601 format
+```
+
+```{note}
+There are three (or four) ways to define variables in JavaScript: `var`, `let`, and `const`. Each has subtle differences mostly related to scope and mutability. People have strong opinions on this. You can read about it [here](https://www.freecodecamp.org/news/var-let-and-const-whats-the-difference/) if you are interested.
+```
+
+You can also define arrays and objects to store more complex data structures. For example:
+
+```javascript
+// An array of the names of the planets. (Pluto is a minor planet, sorry Pluto.)
+const planets = ["Mercury", "Venus", "Earth", "Mars", "Jupiter", "Saturn", "Uranus", "Neptune"];
+```
+
+You can access the elements of an array using their index, for example: `planets[0]` returns "Mercury" (JavaScript uses zero-based indexing). You can add elements to an array using the `push` method, for example: `planets.push("Pluto")` would add "Pluto" to the end of the array. You can remove the last element of an array using `planets.pop()`, or the first using `planets.shift()`.
+
+To delete a specific element from an array, you can use the `splice` method, for example:
+
+```javascript
+// get the index of "Pluto" and delete one element beginning at that index
+index = planets.indexOf("Pluto");
+if (index !== -1) {
+    planets.splice(index, 1);
+}
+```
+
+An array can be iterated over using a loop, for example:
+
+```javascript
+for (var i = 0; i < planets.length; i++) {
+    core.debug("Hello, " + planets[i] + "!");
+}
+```
+
+This is the basic structure of a loop. The first part `var i = 0` initializes the loop variable `i` (for index) to 0. The second part `i < planets.length` is the conditional and the loop will continue as long as this condition is true. The third part `i++` increments the loop variable `i` by 1 after each iteration of the loop. For each iteration of the loop, it will concatenate the string "Hello, " with the name of each planet and "!" and print a greeting to the console log.
+
+```{note}
+Blocks of code in JavaScript are delimited with curly braces `{}`. This is also a common source of errors in scripts, so be sure to include the opening and closing curly braces for all blocks of code, such as function definitions and loops.
+```
+
+Another common data structure is an object, which is a collection of key-value pairs. For example:
+
+```javascript
+// an object with the parameters for displaying an image
+const alf_CMa = {
+    id: "alf_CMa",
+    path: "../images/alf_CMa.png",
+    ra: "6h 45m 08.0s",
+    dec: "-16d 43m 30.0s",
+    angSize: 1.5, // arcminutes
+    rotation: 0,  // degrees
+    minRes: 2.5,
+    maxBright: 14,
+    visible: false
+};
+```
+
+You can access the properties of an object using dot notation, for example: `alf_CMa.ra` returns the string "6h 45m 08.0s".
+
+```{note}
+You will see some examples of common JavaScript constructs throughout this guide, but I won't go into detail about them. There are many free resources available online to learn the basics, such as [this one](https://www.geeksforgeeks.org/javascript/javascript-tutorial/), or [this one](https://www.freecodecamp.org/news/learn-javascript-for-beginners/). If you get stuck, ChatGPT knows JavaScript an even a little about Stellarium.
+```
+
+### Functions
+
+Functions are reusable blocks of code that perform a specific task. You can define your own functions in your script to organize your code and make it more modular. For example:
+
+```javascript
+// a function to pause the script until the user presses the 'L' key
+function pauseKey(label = true) {
+    var timerate = core.getTimeRate();
+    core.setTimeRate(0.05);
+    L = LabelMgr.labelScreen("Paused ('L' to continue)", 20, core.getScreenHeight() - 60,
+        visible = false, fontSize = 18, fontColor = "#666666");
+    if (label) {
+        LabelMgr.setLabelShow(L, true);
+    }
+    do {
+        core.wait(1);
+    }
+    while (core.getTimeRate() < 0.1);
+    core.setTimeRate(timerate);
+    LabelMgr.deleteLabel(L);
+}
+```
+
+You would call this function with `pauseKey()`. It will pause the script until the user presses the 'L' key. It does this by saving the current time rate, setting the time rate to a slow value to effectively pause the script, and then waiting in a loop until the time rate is increased again (by pressing 'L'). After resuming, it restores the original time rate. It has an optional argument `label` which defaults to `true`.
+
 ### Include statements
 
 You can include other scripts in your script using the `include` function. Included scripts contain variables and functions that can be used elsewhere in your script. This is useful for organizing your code and reusing common functions across multiple scripts. Included scripts typically have a `.inc` extension to indicate that they are meant to be included in other scripts rather than run on their own. These will not be listed in the scripts tab and can not be run directly.
@@ -30,10 +152,6 @@ The `include` function takes the path to the script you want to include as an ar
 
 ```javascript
 include("common_objects.inc");
-```
-
-```{note}
-All statements in JavaScript files must end with a semicolon. This is a common source of errors in scripts, so be sure to include semicolons at the end of each statement.
 ```
 
 An example of what an include file might contain.
@@ -46,21 +164,24 @@ An example of what an include file might contain.
 //              Defines: planets, constellations, nebulae
 
 // Constellations
-var constellations = ConstellationMgr.getConstellationsEnglishNames();
+const constellations = ConstellationMgr.getConstellationsEnglishNames();
 
-var circumpolar = new Array("UMi", "UMa", "Dra", "Cep", "Cas", "Cam");
+const circumpolar = ["UMi", "UMa", "Dra", "Cep", "Cas", "Cam"];
 
-var zodiac = new Array("Ari", "Tau", "Gem", "Can", "Leo",
-    "Vir", "Lib", "Sco", "Sgr", "Cap", "Aqr", "Psc");
+const zodiac = ["Ari", "Tau", "Gem", "Can", "Leo",
+    "Vir", "Lib", "Sco", "Sgr", "Cap", "Aqr", "Psc"];
 
 // Messier and Caldwell lists
-var messier = new Array();
-var caldwell = new Array();
-for (var i = 1; i <= 109; i++) {
+const messier = [];
+const caldwell = [];
+
+for (let i = 1; i <= 110; i++) {
     messier.push("M" + i);
-    caldwell.push("C" + i);
+
+    if (i <= 109) {
+        caldwell.push("C" + i);
+    }
 }
-messier.push("M110");
 ```
 
 The first line of this example the script calls the `getConstellationsEnglishNames` function of the `ConstellationMgr` object to get an array of the names of all the constellations in English and assigns it to the variable `constellations`.
@@ -69,62 +190,6 @@ The next two lines define arrays for the circumpolar and zodiac constellations.
 
 The last part defines two empty arrays for the Messier and Caldwell objects and uses a loop to generate the names of the objects.
 
-The arrays are lists of objects that can be accessed by index or iterated over in a loop. For example, you could use the `zodiac` array to point to select and display each constellation in turn.
-
-```{note}
-There are three (or four) ways to define variables in JavaScript: `var`, `let`, and `const`. Each has subtle differences mostly related to scope and mutability. People have strong opinions on this. You can read about it [here](https://www.freecodecamp.org/news/var-let-and-const-whats-the-difference/) if you are interested.
-```
-
-### Variables and functions
-
-While it is not strictly required to define variables and functions before using them in a script, sometimes it is, and it is generally good practice to do so in all cases.
-
-```javascript
-include("common_objects.inc");
-
-// Define some colors
-const White = core.vec3f(1.0, 1.0, 1.0);                  // #FFFFFF
-const Gray = core.vec3f(0.4, 0.4, 0.4);                   // #666666
-const Black = core.vec3f(0.0, 0.0, 0.0);                  // #000000
-
-const BrightRed = core.vec3f(0.8314, 0.1647, 0.1647);     // #D42A2A
-const TrueGreen = core.vec3f(0.00000, 0.56863, 0.00000);  // #009100
-const Cobalt = core.vec3f(0.00000, 0.28627, 0.56863);     // #004991
-
-
-const dtg = "2026-05-01T00:00:00"; // Date and time in ISO 8601 format
-
-const epochTime = Date.now(); // Current date and time in milliseconds since the Unix epoch
-const julianDate = getJulianDate(epochTime); // Current date and time in Julian date format
-
-
-function pauseKey(label = true) {
-    var timerate = core.getTimeRate();
-    core.setTimeRate(0.05);
-    L = LabelMgr.labelScreen("Paused ('L' to continue)", 20, core.getScreenHeight() - 60,
-        visible = false, fontSize = 18, fontColor = "#666666");
-    if (label) {
-        LabelMgr.setLabelShow(L, true);
-    }
-    i = 0;
-    do {
-        core.wait(1);
-        i++;
-    }
-    while (core.getTimeRate() < 0.1);
-    core.setTimeRate(timerate);
-    LabelMgr.deleteLabel(L);
-}
-
-```
-
-In this example, we define some color variables using the `core.vec3f` function so that they can be referred to by name rather than by their RGB values. We also define a constant variable `dtg` that contains a date and time in ISO 8601 format, and we use the `Date.now()` function to get the current date and time in milliseconds since the Unix epoch, which we then convert to Julian date format using the `getJulianDate` function. These are defined as constants because they are not meant to be changed.
-
-Finally, we define a function called `pauseKey` that pauses the script until the user presses the 'L' key. The function takes an optional argument `label` that determines whether to display a label on the screen while paused. The function saves the current time rate, sets the time rate to a slow value to effectively pause the script, and then waits in a loop until the time rate is increased again (by pressing 'L'). After resuming, it restores the original time rate and deletes the label if it was displayed.
-
-```{note}
-Blocks of code in JavaScript are denoted by curly braces `{}`. This is also a common source of errors in scripts, so be sure to include the opening and closing curly braces for all blocks of code, such as function definitions and loops.
-```
 
 ### Main script
 
@@ -132,38 +197,40 @@ The main part of the script consists primarily of a series of calls to the Stell
 
 The API modules are automatically loaded by the Stellarium scripting engine, so you can use any of the available functions and properties in your script without needing to import or require anything. You can find a list of all the available API modules and their functions and properties in the Stellarium scripting documentation.
 
-The `core` module contains functions and properties related to the core functionality of Stellarium. They can be accessed using the `core` object, for example:
+The [`core`](https://stellarium.org/doc/26.0/classStelMainScriptAPI.html) module contains functions and properties related to the core functionality of Stellarium. They can be accessed using the `core` object, for example:
 
 ```javascript
- core.setDate(dtg, spec = "local");
+ core.setDate("2026-05-01T00:00:00", spec = "local");
  ```
 
-In addition, the following modules are available for use in scripts:
+The `core` functions are more general and usually easier to use so I recommend using those when possible. Other modules have functions useful for more specific tasks.
 
-- `AsterismMgr`
-- `ConstellationMgr`
-- `CustomObjectMgr`
-- `HighlightMgr`
-- `GridLinesMgr`
-- `LabelMgr`
-- `MarkerMgr`
-- `LandscapeMgr`
-- `SporadicMeteorMgr`
-- `NebulaMgr`
-- `ScreenImageMgr`
-- `SolarSystem`
-- `StarMgr`
-- `StelActionMgr`
-- `StelAudioMgr`
-- `StelVideoMgr`
-- `StelMovementMgr`
-- `StelSkyDrawer`
-- `StelSkyLayerMgr`
-- `SpecialMarkersMgr`
-- `MilkyWay`
-- `ZodiacalLight`
-- `HipsMgr`
-- `NomenclatureMgr`
+Take a look at the following modules that are available for use in scripts. Some you will use a lot, while others you may never use.
+
+- [`AsterismMgr`](https://stellarium.org/doc/26.0/classAsterismMgr.html)
+- [`ConstellationMgr`](https://stellarium.org/doc/26.0/classConstellationMgr.html)
+- [`CustomObjectMgr`](https://stellarium.org/doc/26.0/classCustomObjectMgr.html)
+- [`HighlightMgr`](https://stellarium.org/doc/26.0/classHighlightMgr.html)
+- [`GridLinesMgr`](https://stellarium.org/doc/26.0/classGridLinesMgr.html)
+- [`LabelMgr`](https://stellarium.org/doc/26.0/classLabelMgr.html)
+- [`MarkerMgr`](https://stellarium.org/doc/26.0/classMarkerMgr.html)
+- [`LandscapeMgr`](https://stellarium.org/doc/26.0/classLandscapeMgr.html)
+- [`SporadicMeteorMgr`](https://stellarium.org/doc/26.0/classSporadicMeteorMgr.html)
+- [`NebulaMgr`](https://stellarium.org/doc/26.0/classNebulaMgr.html)
+- [`ScreenImageMgr`](https://stellarium.org/doc/26.0/classScreenImageMgr.html)
+- [`SolarSystem`](https://stellarium.org/doc/26.0/classSolarSystem.html)
+- [`StarMgr`](https://stellarium.org/doc/26.0/classStarMgr.html)
+- [`StelActionMgr`](https://stellarium.org/doc/26.0/classStelActionMgr.html)
+- [`StelAudioMgr`](https://stellarium.org/doc/26.0/classStelAudioMgr.html)
+- [`StelVideoMgr`](https://stellarium.org/doc/26.0/classStelVideoMgr.html)
+- [`StelMovementMgr`](https://stellarium.org/doc/26.0/classStelMovementMgr.html)
+- [`StelSkyDrawer`](https://stellarium.org/doc/26.0/classStelSkyDrawer.html)
+- [`StelSkyLayerMgr`](https://stellarium.org/doc/26.0/classStelSkyLayerMgr.html)
+- [`SpecialMarkersMgr`](https://stellarium.org/doc/26.0/classSpecialMarkersMgr.html)
+- [`MilkyWay`](https://stellarium.org/doc/26.0/classMilkyWay.html)
+- [`ZodiacalLight`](https://stellarium.org/doc/26.0/classZodiacalLight.html)
+- [`HipsMgr`](https://stellarium.org/doc/26.0/classHipsMgr.html)
+- [`NomenclatureMgr`](https://stellarium.org/doc/26.0/classNomenclatureMgr.html)
 
 Some, but not all of the plugins are also accessible from scripts.
 
@@ -277,9 +344,105 @@ Make sure the waitFor date is in the future relative to the current date and tim
 
 There are quite a few functions for getting, setting, and working with dates and times in the `core` module, so be sure to check the documentation for more information on how to use them in your scripts.
 
-#### Selecting and Viewing Objects
+#### Selecting Objects and Navigating the Sky
 
-  TODO:
+The `StelMovementMgr` module has a few functions to let you quickly set the view. You can use `lookNorth()`, `lookSouth()`, `lookEast()`, `lookWest()`,`lookTowardsNCP()`, and `lookZenith()` to quickly set the view to the cardinal directions, the NCP or the zenith. The `zoomTo(fov, duration)` function can be used to set the field of view to a specific value in degrees over a specified duration in seconds. To reset the view to the default view, you can use `core.goHome()`.
+
+```javascript
+// This example demonstrates use of the StelMovementMgr module to set the view.
+
+core.goHome(); // reset the view to the default
+core.wait(2); // wait for 2 seconds
+
+StelMovementMgr.lookEast();
+core.wait(2);
+
+StelMovementMgr.lookSouth();
+core.wait(2);
+
+StelMovementMgr.lookWest();
+core.wait(2);
+
+StelMovementMgr.lookNorth();
+core.wait(2);
+
+StelMovementMgr.lookTowardsNCP();
+GridLinesMgr.setFlagEquatorGrid(true); // turn on the equatorial grid to show the NCP
+StelMovementMgr.zoomTo(30, 4); // zoom to 30 degrees over 4 seconds
+core.wait(6); // wait for 6 seconds, 4 seconds for the zoom to complete and 2 seconds more.
+GridLinesMgr.setFlagEquatorGrid(false);
+
+StelMovementMgr.lookZenith();
+GridLinesMgr.setFlagAzimuthalGrid(true); // turn on the azimuthal grid to show the zenith
+StelMovementMgr.zoomTo(180, 4);
+core.wait(4);
+GridLinesMgr.setFlagAzimuthalGrid(false);
+```
+
+```{note}
+If you invoke `core.goHome()` from the zenith, it will mess up the horizon line (unless the home position is the zenith, in which case it's fine). To fix this, you can move slightly off the zenith before calling `core.goHome()`.
+```
+
+##### Navigating by Coordinates
+
+You can use `core.moveToAltAzi(alt, az, duration)` and `core.moveToRaDec(ra, dec, duration)` to set the view to a specific azimuth and altitude or RA and Dec. The RA and Dec here are apparent. There are functions for J2000 and galactic coordinates as well. You can set the view or get the current view in any of these coordinate systems. You can set the view to either "azimuthal" or "equatorial" using the `core.setMountMode("mode")` function. Azimuthal will give you a view relative to your local horizon, while the default equatorial view is North up, East left.
+
+##### Moving to Objects Specified by Name
+
+Another way to navigate is to select or move to specific objects. The function `core.moveToObject(object, duration)` will move the view to the specified object over the specified duration in seconds. The object can be specified by name or designation. They can be stars, solar system objects, deep sky objects, or constellations.
+
+##### Selecting Objects and Zooming
+
+You can select objects by name or designation using the `core.selectObjectByName(object)` function. You can then go to the object using `core.moveToSelectedObject(duration)`. You can use the `StelMovementMgr.autoZoomIn()` and `StelMovementMgr.autoZoomOut()` functions to zoom in and out on the selected object. Selected objects will remain in the center of the screen as the time changes, so if you fast forward the time and want the horizon to remain fixed, use `StelMovementMgr.deselection()` to deselect all objects first.
+
+```javascript
+// This example demonstrates how to select objects by name and show them.
+
+include("common_objects.inc");
+
+core.setDate("2026-06-01T21:00:00", spec = "local");
+
+// set the view to the north twenty degrees above the horizon
+core.moveToAltAzi(20, 0, 4);
+StelMovementMgr.zoomTo(60, 4);
+core.wait(4);
+
+// fast forward 30 minutes
+core.setTimeRate(800);
+core.waitFor("+30minutes");
+core.setTimeRate(0);
+core.wait(4);
+
+// select Polaris and move to it
+core.selectObjectByName("Polaris");
+core.moveToSelectedObject(); // default duration is 1 second
+StelMovementMgr.autoZoomIn();
+core.wait(4);
+StelMovementMgr.autoZoomOut();
+
+// set up constellation lines and equatorial grid
+ConstellationMgr.setFlagIsolateSelected(true);
+ConstellationMgr.setFlagConstellationPick(false);
+ConstellationMgr.deselectConstellations();
+ConstellationMgr.setFlagLines(true);
+
+StelMovementMgr.lookTowardsNCP();
+GridLinesMgr.setFlagEquatorGrid(true);
+StelMovementMgr.zoomTo(80, 4);
+
+// loop through the circumpolar constellations while fast forwarding
+core.setTimeRate(800);
+
+// circumpolar is an array defined in the common_objects.inc 
+for (var i = 0; i < circumpolar.length; i++) {
+    core.selectConstellationByName(circumpolar[i]);
+    StelMovementMgr.deselection();
+    core.wait(2);
+}
+
+core.waitFor("+3hours", spec = "local");
+core.setTimeRate(0);
+```
 
 #### Lines, Constellations, Labels, and Markers
 
