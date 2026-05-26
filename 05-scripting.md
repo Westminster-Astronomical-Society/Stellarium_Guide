@@ -29,7 +29,7 @@ console.log("Hello, world!");
 ```
 
 This will print "Hello, world!" to the terminal and if you start Stellarium in a terminal you will, in fact, see this message printed there.
-But you probably want to see messages in Stellarium, so instead you can use the `core.debug()` function from the Stellarium APIto print messages to the script console log. For example:
+But you probably want to see messages in Stellarium, so instead you can use the `core.debug()` function from the Stellarium API to print messages to the script console log. For example:
 
 ```javascript
 core.debug("Hello, Universe!");
@@ -51,6 +51,8 @@ All statements in JavaScript files must end with a semicolon. This is a common s
 
 ### Common JavaScript Data Structures
 
+#### Variables and Constants
+
 You can define variables and constants in your script to store values that you want to use later. For example:
 
 ```javascript
@@ -62,6 +64,8 @@ var date = "2026-05-01T00:00:00"; // Date and time in ISO 8601 format
 ```{note}
 There are three (or four) ways to define variables in JavaScript: `var`, `let`, and `const`. Each has subtle differences mostly related to scope and mutability. People have strong opinions on this. You can read about it [here](https://www.freecodecamp.org/news/var-let-and-const-whats-the-difference/) if you are interested.
 ```
+
+#### Arrays
 
 You can also define arrays and objects to store more complex data structures. For example:
 
@@ -96,7 +100,9 @@ This is the basic structure of a loop. The first part `var i = 0` initializes th
 Blocks of code in JavaScript are delimited with curly braces `{}`. This is also a common source of errors in scripts, so be sure to include the opening and closing curly braces for all blocks of code, such as function definitions and loops.
 ```
 
-Another common data structure is an object, which is a collection of key-value pairs. For example:
+#### Objects
+
+Another common data structure is an object (That's actually what it's called). It is a collection of key-value pairs. For example:
 
 ```javascript
 // an object with the parameters for displaying an image
@@ -114,10 +120,6 @@ const alf_CMa = {
 ```
 
 You can access the properties of an object using dot notation, for example: `alf_CMa.ra` returns the string "6h 45m 08.0s".
-
-```{note}
-You will see some examples of common JavaScript constructs throughout this guide, but I won't go into detail about them. There are many free resources available online to learn the basics, such as [this one](https://www.geeksforgeeks.org/javascript/javascript-tutorial/), or [this one](https://www.freecodecamp.org/news/learn-javascript-for-beginners/). If you get stuck, ChatGPT knows JavaScript an even a little about Stellarium.
-```
 
 ### Functions
 
@@ -143,6 +145,10 @@ function pauseKey(label = true) {
 ```
 
 You would call this function with `pauseKey()`. It will pause the script until the user presses the 'L' key. It does this by saving the current time rate, setting the time rate to a slow value to effectively pause the script, and then waiting in a loop until the time rate is increased again (by pressing 'L'). After resuming, it restores the original time rate. It has an optional argument `label` which defaults to `true`.
+
+```{note}
+You will see some examples of common JavaScript constructs throughout this guide, but I won't go into detail about them. There are many free resources available online to learn the basics, such as [this one](https://www.geeksforgeeks.org/javascript/javascript-tutorial/), or [this one](https://www.freecodecamp.org/news/learn-javascript-for-beginners/). If you get stuck, ChatGPT knows JavaScript an even a little about Stellarium.
+```
 
 ### Include statements
 
