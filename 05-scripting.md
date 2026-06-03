@@ -213,30 +213,30 @@ The `core` functions are more general and usually easier to use so I recommend u
 
 Take a look at the following modules that are available for use in scripts. Some you will use a lot, while others you may never use.
 
-- [`AsterismMgr`](https://stellarium.org/doc/26.0/classAsterismMgr.html)
-- [`ConstellationMgr`](https://stellarium.org/doc/26.0/classConstellationMgr.html)
-- [`CustomObjectMgr`](https://stellarium.org/doc/26.0/classCustomObjectMgr.html)
-- [`HighlightMgr`](https://stellarium.org/doc/26.0/classHighlightMgr.html)
-- [`GridLinesMgr`](https://stellarium.org/doc/26.0/classGridLinesMgr.html)
-- [`LabelMgr`](https://stellarium.org/doc/26.0/classLabelMgr.html)
-- [`MarkerMgr`](https://stellarium.org/doc/26.0/classMarkerMgr.html)
-- [`LandscapeMgr`](https://stellarium.org/doc/26.0/classLandscapeMgr.html)
-- [`SporadicMeteorMgr`](https://stellarium.org/doc/26.0/classSporadicMeteorMgr.html)
-- [`NebulaMgr`](https://stellarium.org/doc/26.0/classNebulaMgr.html)
-- [`ScreenImageMgr`](https://stellarium.org/doc/26.0/classScreenImageMgr.html)
-- [`SolarSystem`](https://stellarium.org/doc/26.0/classSolarSystem.html)
-- [`StarMgr`](https://stellarium.org/doc/26.0/classStarMgr.html)
-- [`StelActionMgr`](https://stellarium.org/doc/26.0/classStelActionMgr.html)
-- [`StelAudioMgr`](https://stellarium.org/doc/26.0/classStelAudioMgr.html)
-- [`StelVideoMgr`](https://stellarium.org/doc/26.0/classStelVideoMgr.html)
-- [`StelMovementMgr`](https://stellarium.org/doc/26.0/classStelMovementMgr.html)
-- [`StelSkyDrawer`](https://stellarium.org/doc/26.0/classStelSkyDrawer.html)
-- [`StelSkyLayerMgr`](https://stellarium.org/doc/26.0/classStelSkyLayerMgr.html)
-- [`SpecialMarkersMgr`](https://stellarium.org/doc/26.0/classSpecialMarkersMgr.html)
-- [`MilkyWay`](https://stellarium.org/doc/26.0/classMilkyWay.html)
-- [`ZodiacalLight`](https://stellarium.org/doc/26.0/classZodiacalLight.html)
-- [`HipsMgr`](https://stellarium.org/doc/26.0/classHipsMgr.html)
-- [`NomenclatureMgr`](https://stellarium.org/doc/26.0/classNomenclatureMgr.html)
+- [`AsterismMgr`](https://stellarium.org/doc/26.0/classAsterismMgr.html): Display and manage the asterisms and rayhelpers defined in Sky Culture.
+- [`ConstellationMgr`](https://stellarium.org/doc/26.0/classConstellationMgr.html): Display and manage constellation lines, boundaries, art, and names.
+- [`CustomObjectMgr`](https://stellarium.org/doc/26.0/classCustomObjectMgr.html): Add, remove and manage display of custom objects.
+- [`HighlightMgr`](https://stellarium.org/doc/26.0/classHighlightMgr.html): Add point markers by RA and Dec, or Alt and Az.
+- [`GridLinesMgr`](https://stellarium.org/doc/26.0/classGridLinesMgr.html): Display and manage the various grid lines.
+- [`LabelMgr`](https://stellarium.org/doc/26.0/classLabelMgr.html): Add, remove and manage display of object labels or coordinate labels.
+- [`MarkerMgr`](https://stellarium.org/doc/26.0/classMarkerMgr.html): Allows for creation of custom markers on objects or coordinates.
+- [`LandscapeMgr`](https://stellarium.org/doc/26.0/classLandscapeMgr.html): Manages landscape, atmosphere, and cardinal points.
+- [`SporadicMeteorMgr`](https://stellarium.org/doc/26.0/classSporadicMeteorMgr.html): Simulates a meteor shower, with a random color and radiant.
+- [`NebulaMgr`](https://stellarium.org/doc/26.0/classNebulaMgr.html): Manage the display of deep sky objects.
+- [`ScreenImageMgr`](https://stellarium.org/doc/26.0/classScreenImageMgr.html): Add, remove and display images in x, y screen coordinates.
+- [`SolarSystem`](https://stellarium.org/doc/26.0/classSolarSystem.html): Compute positions and display of solar system objects.
+- [`StarMgr`](https://stellarium.org/doc/26.0/classStarMgr.html): Renders stars and manages star catalogs.
+- [`StelActionMgr`](https://stellarium.org/doc/26.0/classStelActionMgr.html): Create new actions and manage shortcuts.
+- [`StelAudioMgr`](https://stellarium.org/doc/26.0/classStelAudioMgr.html): Load and play audio files.
+- [`StelVideoMgr`](https://stellarium.org/doc/26.0/classStelVideoMgr.html): Load and play videos embedded in the screen.
+- [`StelMovementMgr`](https://stellarium.org/doc/26.0/classStelMovementMgr.html): Manage movement and zoom in reference to the coordinates.
+- [`StelSkyDrawer`](https://stellarium.org/doc/26.0/classStelSkyDrawer.html): Manage the magnitude and brightness and atmospheric effects.
+- [`StelSkyLayerMgr`](https://stellarium.org/doc/26.0/classStelSkyLayerMgr.html): Manage background images, including DSS and DSOs.
+- [`SpecialMarkersMgr`](https://stellarium.org/doc/26.0/classSpecialMarkersMgr.html): Manage the display of FOV and compass markers.
+- [`MilkyWay`](https://stellarium.org/doc/26.0/classMilkyWay.html): Manage the display of the Milky Way.
+- [`ZodiacalLight`](https://stellarium.org/doc/26.0/classZodiacalLight.html): Manage the display of the zodiacal light.
+- [`HipsMgr`](https://stellarium.org/doc/26.0/classHipsMgr.html): Load and display HiPS survey images.
+- [`NomenclatureMgr`](https://stellarium.org/doc/26.0/classNomenclatureMgr.html): Display the names of lunar and planetary features.
 
 Some, but not all of the plugins are also accessible from scripts.
 
