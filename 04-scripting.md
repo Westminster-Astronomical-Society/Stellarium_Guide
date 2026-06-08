@@ -1,4 +1,4 @@
-# Scripting in Stellarium
+# Running Scripts in Stellarium
 
 Stellarium has a powerful scripting engine that allows you to automate tasks, create custom views, and interact with the Stellarium interface. The scripting engine uses JavaScript and provides access to a wide range of functions and properties that allow you to control various aspects of Stellarium.
 
