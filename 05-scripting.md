@@ -196,7 +196,6 @@ The next two lines define arrays for the circumpolar and zodiac constellations.
 
 The last part defines two empty arrays for the Messier and Caldwell objects and uses a loop to generate the names of the objects.
 
-
 ### Main script
 
 The main part of the script consists primarily of a series of calls to the Stellarium API to control various aspects of Stellarium. This is where you would put the main logic of your script, such as setting the location, time, and landscape, and then performing actions like pointing to objects, changing the field of view, and so on.
@@ -213,7 +212,7 @@ The `core` functions are more general and usually easier to use so I recommend u
 
 Take a look at the following modules that are available for use in scripts. Some you will use a lot, while others you may never use.
 
-- [`AsterismMgr`](https://stellarium.org/doc/26.0/classAsterismMgr.html): Display and manage the asterisms and rayhelpers defined in Sky Culture.
+- [`AsterismMgr`](https://stellarium.org/doc/26.0/classAsterismMgr.html): Display and manage the asterisms and ray helpers defined in Sky Culture.
 - [`ConstellationMgr`](https://stellarium.org/doc/26.0/classConstellationMgr.html): Display and manage constellation lines, boundaries, art, and names.
 - [`CustomObjectMgr`](https://stellarium.org/doc/26.0/classCustomObjectMgr.html): Add, remove and manage display of custom objects.
 - [`HighlightMgr`](https://stellarium.org/doc/26.0/classHighlightMgr.html): Add point markers by RA and Dec, or Alt and Az.
@@ -450,17 +449,305 @@ core.waitFor("+3hours", spec = "local");
 core.setTimeRate(0);
 ```
 
-#### Lines, Constellations, Labels, and Markers
+#### Lines and Constellations
 
-  TODO:
+The `GridLinesMgr` module can be used to manage the display and color of coordinate grid lines, equator, ecliptic, horizon,and meridian lines. Most parameters have `get` and `set` methods so that you can easily customize the appearance and restore defaults.
+
+```javascript
+// This example demonstrates how to use the GridLinesMgr module to manage grid lines.
+
+//Some colors for use in the example
+const BrightRed = core.vec3f(0.8314, 0.1647, 0.1647)        // #D42A2A
+const TrueGreen = core.vec3f(0.00000, 0.56863, 0.00000)     // #009100
+
+const DarkRed = core.vec3f(0.37647, 0.12549, 0.12941)       // #602021
+const DarkGreen = core.vec3f(0.12549, 0.37647, 0.12549)     // #206020
+
+// turn off all grid lines
+GridLinesMgr.setFlagAllGrids(false);
+GridLinesMgr.setFlagAllLines(false);
+
+// turn on the equatorial grid and set the color to red
+GridLinesMgr.setEquatorGridColor(BrightRed);
+GridLinesMgr.setFlagEquatorGrid(true);
+core.wait(5);
+GridLinesMgr.setEquatorGridColor(DarkRed);
+core.wait(5);
+GridLinesMgr.setFlagEquatorGrid(false);
+
+// turn on the alt- grid and set the color to green
+GridLinesMgr.setAltGridColor(TrueGreen);
+GridLinesMgr.setFlagAltGrid(true);
+core.wait(5);
+GridLinesMgr.setAltGridColor(DarkGreen);
+core.wait(5);
+GridLinesMgr.setFlagAltGrid(false);
+```
+
+You can use the `ConstellationMgr` and `AsterismMgr` modules to manage the
+display of constellation and asterism lines, boundaries, and art. The
+constellations and asterisms are those that are defined in the current sky
+culture. You can use the `core.setSkyCulture("culture")` function to change the
+sky culture to one of the available cultures, which will change the
+constellations and asterisms that are available for display.
+`core.getAllSkyCultureIDs()` will return an array of the available sky cultures.
+
+```{note}
+Not all sky cultures have constellation art or boundaries defined. The "modern" sky
+culture has all IAU constellations with lines, boundaries, art, and common asterisms
+defined, so it is a good one to use if you want to show all of these things.
+```
+
+```javascript
+// This example demonstrates how to use the ConstellationMgr
+
+var circumpolar = ["UMi", "UMa", "Dra", "Cep", "Cas", "Cam"];
+
+var zodiac = ["Ari", "Tau", "Gem", "Can", "Leo", "Vir", "Lib",
+              "Sco", "Sgr", "Cap", "Aqr", "Psc"];
+
+ConstellationMgr.deselectConstellations();
+core.setSkyCulture("modern");
+
+ConstellationMgr.setFlagIsolateSelected(true); // show only the selected constellation
+ConstellationMgr.setFlagConstellationPick(true); // show only one at a time
+
+ConstellationMgr.setFlagLines(true); // turn on constellation lines
+ConstellationMgr.setFlagBoundaries(true); // turn on constellation boundaries
+
+// loop through the zodiac constellations
+for (var i = 0; i < zodiac.length; i++) {
+    core.selectConstellationByName(zodiac[i]);
+    core.wait(5);
+}
+
+ConstellationMgr.deselectConstellations();
+ConstellationMgr.setFlagConstellationPick(false); // show all selected
+
+// loop through the circumpolar constellations
+for (var i = 0; i < circumpolar.length; i++) {
+    core.selectConstellationByName(circumpolar[i]);
+    core.wait(5);
+}
+
+ConstellationMgr.deselectConstellations();
+```
+
+#### Labels, and Markers
+
+The `LabelMgr` and `MarkerMgr` modules can be used to add and display labels and
+markers. Markers and labels for existing catalog objects can be customized with
+the `NebulaMgr` module.
+
+Use  `labelObject()`,`labelHorizon()`, `labelEquatorial()` and `labelScreen()`
+to add labels to objects, sky coordinates, and screen coordinates, respectively.
+These functions return a label ID that can be used to manage the label, for
+example to show or hide, or delete it.
+
+You can customize the appearance of the labels using the various parameters of
+the label functions, such as font size, color, and position. You can also use
+the `setLabelShow(labelID, true/false)` function to show or hide labels, and the
+`deleteLabel(labelID)` function to delete labels when they are no longer needed.
+There is also a `deleteAllLabels()` function to delete all labels at once.
+
+**`labelObject` parameters:**
+
+```javascript
+LabelMgr.labelObject(
+        text,                       // the label text
+        object,                     // the name of the object to label
+        visible = true,             // visible upon creation. Default is true.
+        fontSize = 14,              // font size. Default is 14.
+        fontColor = "#999999",    // the color of the label text in hex or vec3f format. Default is a light gray.
+        side = "E",                 // the side of the object to place the label (N, S, E, W)
+        labelDistance = -1.0,       // the distance from the object to place the label)
+        style = "TextOnly",         // "TextOnly" or "Line" to show a line from the object to the label
+        autoDelete = false,         // automatically delete the label after it is shown once. Default is false.
+        autoDeleteTimeoutMs = 0     // if not zero, delete after specified time in milliseconds.
+)
+```
+
+Check the [`LabelMgr`](https://stellarium.org/doc/26.0/classLabelMgr.html)
+documentation for the parameters of each of the label functions for more
+information on how to customize the appearance of your labels.
+
+```javascript
+// This example demonstrates how to use the LabelMgr module.
+
+// add a label to Polaris
+var label1 = LabelMgr.labelObject("Polaris", visible=false,
+                                 fontSize = 18, fontColor = "#4444ff");
+LabelMgr.setLabelShow(label1, true);
+core.wait(5);
+LabelMgr.setLabelShow(label1, false);
+LabelMgr.deleteLabel(label1);
+
+// add a label to the NCP
+var label2 = LabelMgr.labelEquatorial("NCP", "0h 0m 0s", "90d 0m 0s", visible=false,
+                                     fontSize = 18, fontColor = "#ff4444");
+LabelMgr.setLabelShow(label2, true);
+core.wait(5);
+LabelMgr.setLabelShow(label2, false);
+LabelMgr.deleteLabel(label2);
+```
+
+Similarly, the `MarkerMgr` module can be used to add markers to objects or coordinates. The `markerObject()`, `markerHorizon()`, and `markerEquatorial()` functions can be used to add markers to objects, or sky coordinates. These functions return a marker ID that can be used to manage the marker, for example use `setMarkerShow(markerID, true/false)` to show or hide, or `deleteMarker(markerID)` to delete it. There is also a `deleteAllMarkers()` function to delete all markers at once.
+
+**`markerObject` parameters:**
+
+```javascript
+MarkerMgr.markerObject(
+        object,                     // the name of the object
+        visible = true,             // visible upon creation. Default is true.
+        mtype = "cross",            // marker type. Default is "cross".
+        color = "#ffff66",        // the color of the marker in hex. Default is a light yellow.
+        size = 6.f,                 // the size of the marker
+        autoDelete = false,         // automatically delete the marker after it is shown once. Default is false.
+        autoDeleteTimeoutMs = 0     // if not zero, delete after specified time in milliseconds.
+)
+```
+
+Marker types can be one of the following:
+
+- "cross": simple cross
+- "circle": simple circle
+- "ellipse": simple horizontal ellipse
+- "square": simple square
+- "dotted-circle": circle drawn with a dotted line
+- "circled-cross" (or "circled-plus"): circle with cross inside
+- "dashed-square": square drawn with a dashed line
+- "squared-dotted-circle" (or "squared-dcircle"): square with a dotted circle inside
+- "crossed-circle": the cross under the circle
+- "target": solid square
+- "gear": the gear shape
+- "disk": the disk shape
+
+```{figure} _images/stel-markers.png
+:name: markers
+:class: dark-light
+:width: 100%
+:align: center
+Marker types.
+```
+
+```javascript
+// This example demonstrates how to use the MarkerMgr module.
+
+//look North and show each marker in succession above the northern horizon
+core.moveToAltAzi(20, 0, 4);
+core.wait(4);
+
+markers = ["cross", "circle", "ellipse", "square", "dotted-circle", "circled-cross",
+           "dashed-square", "squared-dotted-circle", "crossed-circle", "target", "gear", "disk"];
+
+for (var i = 0; i < markers.length; i++) {
+    var marker = MarkerMgr.markerHorizon(0, 32-2*i, visible=false, mtype=markers[i], color="#ff4444", size=15);
+    MarkerMgr.setMarkerShow(marker, true);
+    var label = LabelMgr.labelHorizon(markers[i], 1.5, 32-2*i, visible=false, fontSize=16, fontColor="#ff4444");
+    LabelMgr.setLabelShow(label, true);
+    core.wait(1);
+}
+core.wait(5);
+MarkerMgr.deleteAllMarkers(); // The var is overwritten in the loop.
+LabelMgr.deleteAllLabels();   // Individual markers and labels can't be accessed.
+```
 
 #### Images and Videos
 
-  TODO:
+Stellarium comes with a built in nebulae images that are loaded when the program starts. You can show and hide these with `StelSkyLayerMgr.setFlagShow(true/false)`. This will show or hide all sky layers, including the nebulae and custom textures.
+
+##### Sky Images
+
+The `core` module has functions `loadSkyImage()` and `removeSkyImage()` for
+loading and removing custom sky images. Images should be RGB without an alpha
+channel. Black pixels will be transparent so images with a field large enough to
+have some black areas will blend in better with the sky.
+
+There are a number of ways to specify the position, scale, and orientation of
+the sky image, so be sure to check the documentation for more information on how
+to use these functions.
+
+The easiest way to add a **square image** by central coordinates, size, and rotation is as follows:
+
+```javascript
+core.loadSkyImage(id,   // ID used to show, hide, or delete the image.
+    "file_path",        // file path relative to the user script directory.
+    "5h 26m 8s",        // RA / Az / Longitude
+    "12d 14m 8s",       // Dec/ Alt / Latitude
+    30,                 // size in arcminutes
+    0,                  // rotation in degrees
+    minRes = 2.5,       // 2.5 (default) is recommended.
+    maxBright = 14,     // Vmag/arcmin^2, default is 14
+    visible = true,     // default is true
+    frame = "EqJ2000",  // reference frame, default is "EqJ2000"
+    withAberration = true // correct for aberration, default is true
+)
+```
+
+The reference frame  for sky images can be one of; "EqJ2000", "EqDate",
+"EclJ2000", "EclDate", "Gal(actic)", "SuperG(alactic)", or "AzAlt".
+
+Sky images can be preloaded with the `visible = false` parameter and then displayed
+with `StelSkyLayerMgr.showLayer(id, true)`. This will avoid the delay of loading
+the image at the time it is shown. There is no remove all function for sky images,
+so you have to keep track of them and remove them individually with `core.removeSkyImage(id)`.
+
+##### Screen Images
+
+The `ScreenImageMgr` module can be used to add images to the screen in x, y
+screen coordinates. You can use `createScreenImage()` to load an image,
+`showImage(id, true/false)` to show or hide it, and `deleteImage(id)` to remove
+it. To delete all screen images at once, use `deleteAllImages()`.
+
+The `createScreenImage()` function has the following parameters:
+
+```javascript
+ScreenImageMgr.createScreenImage(id,   // ID used to show, hide, or delete the image.
+    "file_path",        // file path relative to the user script directory.
+    x,                  // x coordinate
+    y,                  // y coordinate
+    scale = 1.0,        // scale factor
+    visible = true,     // visibility
+    alpha = 1.0,        // transparency
+    fadeDuration = 1.0  // fade duration
+)
+```
+
+##### Audio and Video
+
+It is  possible to add audio and video to your presentation using the
+`StelAudioMgr` and `StelVideoMgr` modules, but it is a little flaky. It is
+probably best to use an external program to play audio and video but if you need
+to sync sound and video with your presentation the capability is there.
+
+You can load an audio file with `StelAudioMgr.loadSound("file_path", id)` and
+play it with `StelAudioMgr.playSound(id)`. To pause the audio, use
+`StelAudioMgr.pauseSound(id)`. To stop, use `StelAudioMgr.stopSound(id)`. The
+`StelAudioMgr.dropSound(id)` function will unload the audio.
+
+You can load a video file with `StelVideoMgr.loadVideo()`.
+
+```javascript
+StelVideoMgr.loadVideo(
+    "file_path",        // file path relative to the user script directory.
+    id,                 // ID used to show, hide, or delete the video.
+    x,                  // x coordinate
+    y,                  // y coordinate
+    show = true,        // visibility
+    alpha = 1.0         // transparency
+)
+```
+
+Similar to audio, there are `StelVideoMgr.playVideo(id)`,
+`StelVideoMgr.pauseVideo(id)`, `StelVideoMgr.stopVideo(id)`, and
+`StelVideoMgr.dropVideo(id)` functions to manage the video. Check the
+documentation for additional options.
 
 ## A Few General Tips
 
-If you are new to JavaScript or working with Stellarium scripts, the most important thing to remember is if it works it's good enough. Don't worry about writing perfect code.
+If you are new to JavaScript or working with Stellarium scripts, the most
+important thing to remember is if it works it's good enough. Don't worry about
+writing perfect code.
 
 But... A few things to keep in mind:
 
