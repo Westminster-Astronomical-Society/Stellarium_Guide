@@ -9,7 +9,7 @@ There are two buttons on the bottom toolbar to display the equatorial and horizo
 ```{figure} ./_images/stel-markings.png
 :name: markings
 :class: dark-light
-:width: 60%
+:width: 100%
 :align: center
 Sky markings 
 ```
@@ -27,7 +27,7 @@ The search button or `F3` key will bring up the search dialog. You can also sear
 ```{figure} ./_images/stel-search.png
 :name: search
 :class: dark-light
-:width: 60%
+:width: 100%
 :align: center
 Search dialog
 ```
@@ -37,7 +37,7 @@ There is a tab to query SIMBAD for more information about a selected object. Mor
 ```{figure} ./_images/stel-simbad.png
 :name: simbad
 :class: dark-light
-:width: 60%
+:width: 100%
 :align: center
 SIMBAD query
 ```
@@ -47,7 +47,7 @@ On the position tab you can manually enter coordinates in any of the supported r
 ```{figure} ./_images/stel-coords.png
 :name: coords
 :class: dark-light
-:width: 60%
+:width: 100%
 :align: center
 Position dialog
 ```
@@ -57,7 +57,7 @@ There is also a tab to search for objects by name in the various catalogs and ob
 ```{figure} ./_images/stel-lists.png
 :name: obj-lists
 :class: dark-light
-:width: 60%
+:width: 100%
 :align: center
 Object lists
 ```
@@ -69,7 +69,7 @@ You can display constellation lines and labels by pressing the `C` and `V` keys 
 ```{figure} ./_images/stel-sky_culture.png
 :name: sky-culture
 :class: dark-light
-:width: 60%
+:width: 100%
 :align: center
 Sky culture
 ```
@@ -83,7 +83,7 @@ The SSO (Solar System Object) tab in the Sky and Viewing Options dialog allows y
 ```{figure} ./_images/stel-sso.png
 :name: sky-sso
 :class: dark-light
-:width: 60%
+:width: 100%
 :align: center
 Solar System
 ```
@@ -97,7 +97,7 @@ The default catalogs for DSOs are the Messier and NGC-IC catalogs. You can selec
 ```{figure} ./_images/stel-dso.png
 :name: sky-dso
 :class: dark-light
-:width: 60%
+:width: 100%
 :align: center
 Deep Sky Objects
 ```

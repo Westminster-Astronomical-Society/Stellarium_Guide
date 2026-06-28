@@ -63,7 +63,7 @@ The first thing you should do is set the location and time. If you move the poin
 ```{figure} ./_images/stel-loc.png
 :name: location
 :class: dark-light
-:width: 60%
+:width: 100%
 :align: center
 Location dialog
 ```
@@ -75,7 +75,7 @@ Below the location button is the time configuration button. Click it to open the
 ```{figure} ./_images/stel-time.png
 :name: time
 :class: dark-light
-:width: 60%
+:width: 100%
 :align: center
 Time and Date dialog
 
@@ -92,7 +92,7 @@ The main configuration tab has language setting, high accuracy planetary ephemer
 ```{figure} ./_images/stel-config-1.png
 :name: config-1
 :class: dark-light
-:width: 60%
+:width: 100%
 :align: center
 Configuration dialog
 ```
@@ -102,7 +102,7 @@ The selected object information tab is set to "All available" by default (not "D
 ```{figure} ./_images/stel-config-2.png
 :name: config-2
 :class: dark-light
-:width: 60%
+:width: 100%
 :align: center
 Object information configuration
 ```
@@ -112,7 +112,7 @@ The next tab is "Extras". Here you can add or remove buttons from the bottom too
 ```{figure} ./_images/stel-config-3.png
 :name: config-3
 :class: dark-light
-:width: 60%
+:width: 100%
 :align: center
 Extra configuration
 ```
@@ -122,7 +122,7 @@ The next is the time configuration tab. Here you can set the time that is displa
 ```{figure} ./_images/stel-config-4.png
 :name: config-4
 :class: dark-light
-:width: 60%
+:width: 100%
 :align: center
 Time configuration
 ```
