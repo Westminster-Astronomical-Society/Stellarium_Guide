@@ -66,6 +66,64 @@ function fastForward(rate, wait = "L", spec = "local") {
 };
 ```
 
+### Set Rise and Set Times
+
+The following function allows you to set the time to the rise, set or transit
+times of a specified celestial body. It uses the time string returned by the
+`core.getRTS()` function to retrieve the rise, set, and transit times of the
+specified celestial body and set the time accordingly.
+
+```javascript
+function setTimeFromRTS(timeString)
+{
+    var date = core.getDate("local");      // "2026-06-29T14:23:51"
+    date = date.substring(0, 10);          // "2026-06-29"
+
+    // Convert "20h39m" -> "20:39:00"
+    var time = timeString.replace("h", ":").replace("m", ":00");
+
+    core.setDate(date + "T" + time, "local");
+}
+```
+
+You can use this to set the time to sunrise, sunset.
+
+```javascript
+function setSunrise()
+{
+    var rts = core.getRTS("Sun");
+    setTimeFromRTS(rts["rise"]);
+}
+
+function setSunset()
+{
+    var rts = core.getRTS("Sun");
+    setTimeFromRTS(rts["set"]);
+}
+```
+
+You can specify an altitude to calculate different twilight times. For example,
+astronomical twilight occurs when the Sun is 18 degrees below the horizon.
+
+```javascript
+function setAstTwilight(which)
+{
+    var rts = core.getRTS("Sun", -18);
+    if (which === "start") {            //morning
+        setTimeFromRTS(rts["rise"]);
+    } else if (which === "end") {       //evening
+        setTimeFromRTS(rts["set"]);
+    }
+}
+```
+
+The `core.getRTS()` function can only be used to get the rise, set, and transit
+times for the current date, and local time. There is a `solar_calc.js` script in
+the [Stellarium Template](https://github.com/Westminster-Astronomical-Society/Stellarium_Template)
+repository on GitHub that you can use to get sunrise, sunset, and twilight times
+for other dates.
+
+
 ## Images
 
 ### Load a Custom Sky Image
@@ -127,3 +185,4 @@ function deleteAllSkyImages() {
     };
 };
 ```
+
