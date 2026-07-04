@@ -31,3 +31,7 @@ site:
   #   favicon: favicon.ico
     logo: logo_light.png
     logo_dark: logo_dark.png
+  parts:
+    primary_sidebar_footer: |
+      [www.westminsterastro.org](https://www.westminsterastro.org/)  
+      ![](https://mirrors.creativecommons.org/presskit/icons/cc.svg) ![](https://mirrors.creativecommons.org/presskit/icons/by.svg) [CC BY 4.0](https://creativecommons.org/licenses/by/4.0/),  
